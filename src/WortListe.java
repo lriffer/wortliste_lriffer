@@ -12,6 +12,7 @@ public class WortListe {
 	 * Konstruktor ohne parameter
 	 */
 	public WortListe() {
+
 		this.wort = new WortEintrag[0];
 	}
 	/**
@@ -76,15 +77,15 @@ public class WortListe {
 	 * @param w das gelöscht wird
 	 * @return ob funktioniert hat
 	 */
-	public boolean WortDelete(String w) {
-		for(int i = 0 ; i<wort.length; i++) {
-			if(wort[i]!=null) {
-				if(wort[i].equals(w)) {
-					wort[i] = null;
-					return true;
+	public void WortDelete(int in) throws IndexOutOfBoundsException{
+			if(in<0 || in> this.wort.length-1) {
+				IndexOutOfBoundsException exc = new IndexOutOfBoundsException();
+				throw exc;
+			}else {
+					this.wort[i] = null;
 				}
 			}
-		}
+
 		return false;
 	}
 	/**
