@@ -1,102 +1,122 @@
 package lriffer;
-
-import javax.swing.*;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 /**
- * Klasse für ein einziges wort
+ * Worteintrag
  * @author Lili Riffer
- * @version 08-11-2021
+ * @version 2022-1-11
  */
 public class WortEintrag {
-	//Attribute
 	private String wort;
 	private String url;
+
 	/**
-	 * konstruktor mit parameter
-	 * @param w wort
-	 * @param u url
+	 * Kontruktor
+	 * @param wort Wort
+	 * @param url Url
+	 * @throws IllegalArgumentExceptio Falls Url ungültig ist
 	 */
-	public WortEintrag(String w, String u) {
-		this.wort = w;
-		if(WortEintrag.checkURL(u)==true) {
-			this.url = u;	
+	public WortEintrag (String wort, String url) throws IllegalArgumentException {
+		this.wort = wort;
+		if (WortEintrag.checkURL(url) == false) {
+			IllegalArgumentException exc = new IllegalArgumentException();
+			throw exc;
+		} else {
+			this.url = url;
 		}
+
 	}
+
 	/**
-	 * setter methode für das wort
-	 * @param w wort das übernommen werden soll
+	 * Konstruktor ohne Parameter
 	 */
-	public void setWort(String w) {
-		try {
-			if(wort.length() >= 2) {
-				this.wort = w;
-			}
-			else {
-				throw new IllegalArgumentException("Das Wort ist zu kurz!");
-			}
-		}
-		catch(IllegalArgumentException ex) {
-			JOptionPane.showMessageDialog(null, ex.getMessage());
-		}
+	public WortEintrag() {
+
 	}
+
 	/**
-	 * getter methode für wort
-	 * @return aktuelles wort
+	 * überprüft, ob eine Url gültig ist (nur das Format wird getestet)
+	 * @param urlTmp Url mit groß/klein schreibung
+	 * @return true/false
+	 */
+	public static boolean checkURL (String urlTmp) {
+		boolean wf = false;
+		boolean wf2 = false;
+		String url = urlTmp.toLowerCase();
+		String tmp = "", tmp2 = "";
+		char b1, b2, b3, b4;
+		int index1 = 0, index2 = 0;
+
+		// �berpr�fen auf http:// oder https://
+		if(url.substring(0, 7).equals("http://") || url.substring(0, 8).equals("https://")) {
+			// Case https: Buchstaben vom 1. - 2. Punkt als Substring speichern
+			for (int i = 9 ; url.charAt(i) != '.' ; i++) {
+				tmp = tmp + url.charAt(i);
+			}
+			// Case http: Buchstaben vom 1. - 2. Punkt als Substring speichern
+			for (int i = 8 ; url.charAt(i) != '.' ; i++) {
+				tmp2 = tmp2 + url.charAt(i);
+			}
+
+			// �berpr�fen, ob der substring danach aus mehreren buchstaben besteht
+			if (tmp.length() > 3 || tmp2.length() > 3) {
+			}
+
+			for (int i = 0 ; i < url.length() ; i++) {
+				if (url.charAt(i) == '.') {
+					wf = true;
+					break;
+				}
+			}
+
+		}
+
+		return wf;
+	}
+
+	/**
+	 * Setter-Methode: Wort
+	 * @param wort Wort
+	 */
+	public void setWort (String wort) {
+		this.wort = wort;
+	}
+
+	/**
+	 * Setter-Methode: Url
+	 * @param url url
+	 * @throws WrongStringException Falls die url ungültig ist
+	 */
+	public void setUrl (String url) throws WrongStringException {
+		if (WortEintrag.checkURL(url) == false) {
+			WrongStringException exc = new WrongStringException("Keine g�ltige URL!");
+			throw exc;
+		} else {
+			this.url = url;
+		}
+
+	}
+
+	/**
+	 * Getter-Methode: Wort
+	 * @return wort
 	 */
 	public String getWort() {
 		return this.wort;
 	}
+
 	/**
-	 * setter methode für die url
-	 * @param u url das übernommen wird
-	 */
-	public void setUrl(String u) {
-		if(checkURL(u) == true) {
-			this.url = u;
-		}
-		else {
-			JOptionPane.showMessageDialog(null, "Die dieUrl ist ungültig!");
-		}
-	}
-	/**
-	 * getter methode für url
-	 * @return aktuelles url
+	 * Getter-Methode: url
+	 * @return url
 	 */
 	public String getUrl() {
 		return this.url;
 	}
+
 	/**
-	 * überschriebene toString methode, sodass
-	 * wort und url mit einem semikolon getrennt
-	 * werden
-	 * @return das fertig zusammengestellte string
+	 * toString methode
+	 * @return Worteinträge als String
 	 */
 	@Override
-	public String toString() {
-		return this.wort + ";" + this.url;
-	}
-	/**
-	 * überprüft, ob es eine sinnvolle url ist, wenn
-	 * ja, wird true zurückgegeben wenn nicht false
-	 * @return ob es sinnvoll ist
-	 */
-	public static boolean checkURL(String u) {
-		if(u==null) {
-			NullPointerException exc = new NullPointerException("URL hat nichts drinnen");
-			return false;
-		}
-		else {
-			try {
-				URL web = new URL(u);
-				web.toURI();
-				return true;
-			} catch(MalformedURLException e) {
-				return false;
-			} catch(URISyntaxException e) {
-				return false;
-			}
-		}
+	public String toString () {
+		return new String(this.wort + "\n" + this.url);
 	}
 }

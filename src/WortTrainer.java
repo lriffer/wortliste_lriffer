@@ -1,69 +1,133 @@
 package lriffer;
-import java.util.*;
+
 /**
- * Klasse für ein worttrainer
+ * WortTrainer
  * @author Lili Riffer
- * @version 08-11-2021
+ * @version 2022-1-11
  */
 public class WortTrainer {
-	//Attribute
-	private WortListe list;
-	private WortEintrag wort;
-	private int abfrage, richtig;
+	private WortListe liste;
+	private WortEintrag aktuell;
+	private int abgefragtC, abgefragt, richtigC, richtig;
+
 	/**
-	 * konstruktor 
-	 * @param l die liste die man trainieren will
+	 * Konstruktor
+	 * @param liste Wortliste
 	 */
-	public WortTrainer(WortListe l) {
-		this.list = l;
+	public WortTrainer (WortListe liste) {
+		this.liste = liste;
+		this.abgefragt = 0;
+		this.richtig = 0;
 	}
-	
-	
+
 	/**
-	 * Zufälliger Worteintrag wird ausgewählt
-	 * @return zufälliger worteintrag
+	 * W�hlt ein zufälliges Wort aus
+	 * @return zufälliges Wort
 	 */
-	public WortEintrag zufallsWort() {
-		this.wort = this.list.findEintrag(new Random().nextInt(this.list.laenge()));
-		return this.wort;
+	public WortEintrag zufaelligesWort () {
+
+		int laenge = this.liste.getEintraegeLenght();
+		int i = (int)(Math.random() * laenge);
+
+		this.aktuell = this.liste.getWortEintrag(i);
+
+		return this.aktuell;
 	}
+
 	/**
-	 * schaut welcher Worteintrag gerade benutzt wird
-	 * @return aktueller worteintrag 
+	 * Gibt dem WortTrainer eine neue WortListe
+	 * @param l neue Liste
 	 */
-	public WortEintrag aktuellWort() {
-		return wort;
+	public void neueListe (WortListe l) {
+		this.liste = l;
 	}
+
 	/**
-	 * schaut ob die zwei wörter übereinstimmen
-	 * @param w wort welches mit dem aktuellen verglichen wird 
-	 * @return ob übereinstimmt oder nicht
+	 * Getter-Methode:aktuell
+	 * @return aktueller eintrag
 	 */
-	public boolean check(String w) {
-		if(String.valueOf(this.wort).equals(w)) {
-			return true;
+	public WortEintrag getAktuell() {
+		return this.aktuell;
+	}
+
+	/**
+	 * Getter-Methode: Liste
+	 * @return liste
+	 */
+	public WortListe getListe () {
+		return this.liste;
+	}
+
+	/**
+	 * überprüft das Wort, beachtet Groß-/Kleinschreibung
+	 * @param wort wort
+	 * @return true/false
+	 */
+	public boolean check (String wort) {
+		boolean wf = false;
+		this.abgefragt++;
+		if (this.aktuell.getWort().equals(wort) == true) {
+			wf = true;
+			this.richtig++;
 		}
-		return false;
+
+		return wf;
 	}
+
 	/**
-	 * schaut ob zwei wörter übereinstimmen wobei
-	 * groß/kleinschreibung ignoriert wird
-	 * @param w das verglichen wird
-	 * @return ob übereinstimmt oder nicht
+	 * überprüft das Wort, beachtet Groß-/Kleinschreibung nicht
+	 * @param wort wort
+	 * @return true/false
 	 */
-	public boolean checkIgnoreCase(String w) {
-		if(String.valueOf(this.wort).toLowerCase().equals(String.valueOf(w).toLowerCase())) {
-			return true;
+	public boolean checkIgnoreCase (String wort) {
+		boolean wf = false;
+		this.abgefragtC++;
+		if (this.aktuell.getWort().toLowerCase().equals(wort.toLowerCase()) == true) {
+			wf = true;
+			this.richtigC++;
 		}
-		return false;
+
+		return wf;
 	}
-	public void newList(WortListe l){
-		this.list = l;
+
+	/**
+	 * Setter-Methode für abgefragt
+	 * @param x neuer Wert
+	 */
+	public void setAbgefragt (int x) {
+		this.abgefragt = x;
 	}
-	public void setAbfrage(int x){
-		this.abfrage = x;
-	}
-	public void setRichtig(int x){
+
+	/**
+	 * Setter-Methode für richtig
+	 * @param x neuer Wert
+	 */
+	public void setRichtig (int x) {
 		this.richtig = x;
 	}
+
+	/**
+	 * Getter-Methode für abgefragt
+	 * @return abgefragt
+	 */
+	public int getAbgefragt () {
+		return this.abgefragt;
+	}
+
+	/**
+	 * Getter-Methode für richtig
+	 * @return richtig
+	 */
+	public int getRichtig () {
+		return this.richtig;
+	}
+
+	public String statistik () {
+		String statistik = "Abgefragt mit Groß-/Kleinschreibung: " + this.abgefragt + "\n Korrekte Rechtschreibung: " + this.richtig +
+				"\n \n Abgefragt ohne Groß-/Kleinschreibung: " + this.abgefragtC + "\n Korrekte Rechtschreibung: " + this.richtigC;
+
+		return statistik;
+	}
+
+
 }
